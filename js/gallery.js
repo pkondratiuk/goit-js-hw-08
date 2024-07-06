@@ -64,7 +64,39 @@ const images = [
   },
 ];
 
-const galleryEl = document.querySelector("gallery");
+const galleryEl = document.querySelector(".gallery");
 function createGallery(array) {
-    
+  return array
+    .map(({ preview, original, description }) =>
+      `<li class="gallery-item">
+  <a class="gallery-link" href="${original}">
+    <img
+      class="gallery-image"
+      src="${preview}"
+      data-source="${original}"
+      alt="${description}"
+      width = "360"
+      height = "200"
+    />
+  </a>
+</li>`)
+    .join('');
+}
+
+galleryEl.insertAdjacentHTML('afterbegin', createGallery(images));
+
+galleryEl.addEventListener('click', handlerClick);
+
+
+function handlerClick(event) {
+  event.preventDefault();
+  if (event.currentTarget === event.target) {
+    return
+  }
+  const bigImage = event.target.dataset.source;
+  const instance = basicLightbox.create(
+    ` <div class="modal">
+            <img src="${bigImage}">
+        </div>`);
+  instance.show();
 }
